@@ -24,7 +24,8 @@ class UserController
                     email VARCHAR(255) NOT NULL UNIQUE,
                     password VARCHAR(255) NOT NULL,
                     name VARCHAR(100),
-                    surname VARCHAR(100),
+                    first_surname VARCHAR(100),
+                    second_surname VARCHAR(100),
                     id_role INT,
                     profile_photo VARCHAR(255)
                 )
@@ -47,7 +48,7 @@ class UserController
                 return "Todos los campos son obligatorios.";
             }
 
-            $stmt = $this->conn->prepare("SELECT id_user, name, surname, id_role, password FROM users WHERE email = ?");
+            $stmt = $this->conn->prepare("SELECT id_user, name, first_surname, second_surname, id_role, password FROM users WHERE email = ?");
             $stmt->execute([$email]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -55,7 +56,8 @@ class UserController
                 $_SESSION['logged_in'] = true;
                 $_SESSION['id_user'] = $user['id_user'];
                 $_SESSION['user_name'] = $user['name'];
-                $_SESSION['user_surname'] = $user['surname'];
+                $_SESSION['user_first_surname'] = $user['first_surname'];
+                $_SESSION['user_first_surname'] = $user['second_surname'];
                 $_SESSION['user_email'] = $email;
                 $_SESSION['id_role'] = $user['id_role'];
 
@@ -104,7 +106,7 @@ class UserController
     {
         if (
             empty($data['email']) || empty($data['password']) ||
-            empty($data['nombre']) || empty($data['apellido'])
+            empty($data['nombre']) || empty($data['primer_apellido']) || empty($data['segundo_apellido'])
         ) {
             return "Todos los campos son obligatorios.";
         }
@@ -112,7 +114,8 @@ class UserController
         $email = $data['email'];
         $password = password_hash($data['password'], PASSWORD_DEFAULT);
         $name = $data['nombre'];
-        $surname = $data['apellido'];
+        $first_surname = $data['primer_apellido'];
+        $second_surname = $data['segundo_apellido'];
         $profilePhoto = '';
 
         try {
@@ -123,8 +126,8 @@ class UserController
                 return "El correo electrónico ya está registrado.";
             }
 
-            $stmt = $this->conn->prepare("INSERT INTO users (email, password, name, surname, id_role, profile_photo) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$email, $password, $name, $surname, $role_id, $profilePhoto]);
+            $stmt = $this->conn->prepare("INSERT INTO users (email, password, name, first_surname, second_surname, id_role, profile_photo) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$email, $password, $name, $first_surname, $second_surname, $role_id, $profilePhoto]);
 
             header("Location: login.php");
             exit;

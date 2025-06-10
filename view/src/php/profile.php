@@ -73,7 +73,8 @@ if (!$user) {
 }
 
 $name = $user['name'];
-$surname = $user['surname'];
+$first_surname = $user['first_surname'];
+$second_surname = $user['second_surname'];
 $email = $user['email'];
 $photo = $user['profile_photo'] ?: '../../media/img/Interfaces/user_icon.png';
 $role = $user['id_role'];
@@ -153,8 +154,12 @@ $role = $user['id_role'];
             <span><?php echo htmlspecialchars($name); ?></span>
         </div>
         <div class="info-group">
-            <label>Apellido</label>
-            <span><?php echo htmlspecialchars($surname); ?></span>
+            <label>Primer apellido</label>
+            <span><?php echo htmlspecialchars($first_surname); ?></span>
+        </div>
+        <div class="info-group">
+            <label>Segundo apellido</label>
+            <span><?php echo htmlspecialchars($second_surname); ?></span>
         </div>
         <div class="info-group">
             <label>Correo electrónico</label>
