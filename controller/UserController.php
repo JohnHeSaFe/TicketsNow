@@ -116,6 +116,10 @@ class UserController
             return "La contraseña es incorrecta. Debe ser de 6 caracteres y que contenga al menos 1 numero.";
         }
 
+        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            return "El email no es válido.";
+        }
+
         $email = $data['email'];
         $password = password_hash($data['password'], PASSWORD_DEFAULT);
         $name = $data['nombre'];
