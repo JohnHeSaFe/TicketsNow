@@ -111,6 +111,11 @@ class UserController
             return "Todos los campos son obligatorios.";
         }
 
+        $pattern = "/^(?=.*\d)[A-Za-z\d]{6}$/";
+        if (!preg_match($pattern, $data['password'])) {
+            return "La contraseña es incorrecta. Debe ser de 6 caracteres y que contenga al menos 1 numero.";
+        }
+
         $email = $data['email'];
         $password = password_hash($data['password'], PASSWORD_DEFAULT);
         $name = $data['nombre'];
