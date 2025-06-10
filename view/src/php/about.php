@@ -41,7 +41,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) session_start();
                     if (isset($_SESSION['logged_in'])) {
                         echo '<li><a href="profile.php">Mi perfil</a></li>';
 
-                        if ($_SESSION['id_role'] == 3) {
+                        if ($_SESSION['user']->getId_role() == 3) {
                             echo '<li><a href="dashboard.php">Dashboard</a></li>';
                         }
 

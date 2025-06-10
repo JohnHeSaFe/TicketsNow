@@ -1,8 +1,9 @@
 <?php
+require_once __DIR__ . '/../../../controller/User.php';
 session_start();
 require_once __DIR__ . '/../../../controller/UserController.php';
 
-if (!isset($_SESSION['logged_in']) || !isset($_SESSION['id_user'])) {
+if (!isset($_SESSION['logged_in']) || !isset($_SESSION['user'])) {
     header('Location: login.php');
     exit();
 }
@@ -11,8 +12,7 @@ $controller = new UserController();
 
 // Si se ha enviado el formulario de borrar cuenta
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_account'])) {
-    $controller->deleteUser($_SESSION['id_user']);
-    exit(); // Este exit es redundante pero asegura que no sigue procesando más HTML
+    $controller->deleteUser($_SESSION['user']->getId_user());
 }
 
 try {
@@ -24,7 +24,12 @@ try {
 
 $errorMsg = "";
 
-$id_user = $_SESSION['id_user'];
+$id_user = $_SESSION['user']->getId_user();
+$name = $_SESSION['user']->getName();
+$first_surname = $_SESSION['user']->getFirst_surname();
+$second_surname = $_SESSION['user']->getSecond_surname();
+$email = $_SESSION['user']->getEmail();
+$photo = $_SESSION['user']->getProfile_photo() ?: '../../media/img/Interfaces/user_icon.png';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["profile_photo"])) {
     $targetDir = __DIR__ . '/../../media/img/profile_pictures/';
@@ -63,21 +68,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["profile_photo"])) {
         }
     }
 }
-
-$stmt = $pdo->prepare("SELECT * FROM users WHERE id_user = :id");
-$stmt->execute([':id' => $id_user]);
-$user = $stmt->fetch();
-
-if (!$user) {
-    die("Usuario no encontrado.");
-}
-
-$name = $user['name'];
-$first_surname = $user['first_surname'];
-$second_surname = $user['second_surname'];
-$email = $user['email'];
-$photo = $user['profile_photo'] ?: '../../media/img/Interfaces/user_icon.png';
-$role = $user['id_role'];
 ?>
 
 <!DOCTYPE html>
@@ -116,7 +106,7 @@ $role = $user['id_role'];
                 if (isset($_SESSION['logged_in'])) {
                     echo '<li><a href="profile.php">Mi perfil</a></li>';
 
-                    if ($_SESSION['id_role'] == 3) {
+                    if ($_SESSION['user']->getId_role() == 3) {
                         echo '<li><a href="dashboard.php">Dashboard</a></li>';
                     }
 
@@ -166,7 +156,7 @@ $role = $user['id_role'];
             <span><?php echo htmlspecialchars($email); ?></span>
         </div>
 
-        <?php if ($role == 3): ?>
+        <?php if ($_SESSION['user']->getId_role() == 3): ?>
             <form action="profile.php" method="post" enctype="multipart/form-data">
                 <div class="info-group">
                     <label>Cambiar foto de perfil</label>
