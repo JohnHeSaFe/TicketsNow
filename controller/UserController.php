@@ -1,4 +1,5 @@
 <?php
+require_once 'User.php';
 class UserController
 {
     private $conn;
@@ -53,13 +54,19 @@ class UserController
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($user && password_verify($password, $user['password'])) {
+                $user = new User(
+                    $user['id_user'],
+                    $email,
+                    $user['password'],
+                    $user['name'],
+                    $user['first_surname'],
+                    $user['second_surname'],
+                    $user['id_role'],
+                    null 
+                );
+
                 $_SESSION['logged_in'] = true;
-                $_SESSION['id_user'] = $user['id_user'];
-                $_SESSION['user_name'] = $user['name'];
-                $_SESSION['user_first_surname'] = $user['first_surname'];
-                $_SESSION['user_first_surname'] = $user['second_surname'];
-                $_SESSION['user_email'] = $email;
-                $_SESSION['id_role'] = $user['id_role'];
+                $_SESSION['user'] = $user;
 
                 header("Location: ./profile.php");
                 exit;
@@ -127,6 +134,8 @@ class UserController
         $second_surname = $data['segundo_apellido'];
         $profilePhoto = '';
 
+        $user = new User(null, $email, $password, $name, $first_surname, $second_surname, $role_id, $profilePhoto);
+
         try {
             $check = $this->conn->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
             $check->execute([$email]);
@@ -136,7 +145,7 @@ class UserController
             }
 
             $stmt = $this->conn->prepare("INSERT INTO users (email, password, name, first_surname, second_surname, id_role, profile_photo) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$email, $password, $name, $first_surname, $second_surname, $role_id, $profilePhoto]);
+            $stmt->execute([$user->getEmail(), $user->getPassword(), $user->getName(), $user->getFirst_surname(), $user->getSecond_surname(), $user->getId_role(), $user->getProfile_photo()]);
 
             header("Location: login.php");
             exit;
