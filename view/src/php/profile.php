@@ -24,14 +24,30 @@ try {
 
 $errorMsg = "";
 
-$id_user = $_SESSION['user']->getId_user();
-$name = $_SESSION['user']->getName();
-$first_surname = $_SESSION['user']->getFirst_surname();
-$second_surname = $_SESSION['user']->getSecond_surname();
-$unformatted_birth_date = new DateTime($_SESSION['user']->getBirth_date());
+$user = $_SESSION['user'];
+$id_user = $user->getId_user();
+$name = $user->getName();
+$first_surname = $user->getFirst_surname();
+$second_surname = $user->getSecond_surname();
+$unformatted_birth_date = new DateTime($user->getBirth_date());
 $birth_date = $unformatted_birth_date->format("d-m-Y");
-$email = $_SESSION['user']->getEmail();
-$photo = $_SESSION['user']->getProfile_photo() ?: '../../media/img/Interfaces/user_icon.png';
+$gender = $user->getGender();
+switch ($gender) {
+    case 'male':
+        $gender = 'Hombre';
+        break;
+    case 'female':
+        $gender = 'Mujer';
+        break;
+    case 'other':
+        $gender = 'Otro';
+        break;
+    case 'prefer_not_to_say':
+        $gender = 'No especificado';
+        break;
+}
+$email = $user->getEmail();
+$photo = $user->getProfile_photo() ?: '../../media/img/Interfaces/user_icon.png';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["profile_photo"])) {
     $targetDir = __DIR__ . '/../../media/img/profile_pictures/';
@@ -160,6 +176,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["profile_photo"])) {
         <div class="info-group">
             <label>Fecha de nacimiento</label>
             <span><?php echo htmlspecialchars($birth_date); ?></span>
+        </div>
+        <div class="info-group">
+            <label>Genero</label>
+            <span><?php echo htmlspecialchars($gender); ?></span>
         </div>
 
         <?php if ($_SESSION['user']->getId_role() == 3): ?>

@@ -10,8 +10,9 @@ class User {
     private $id_role;
     private $profile_photo;
     private $birth_date;
+    private $gender;
 
-    public function __construct($id_user, $email, $password, $name, $first_surname, $second_surname, $birth_date, $id_role, $profile_photo) {
+    public function __construct($id_user, $email, $password, $name, $first_surname, $second_surname, $birth_date, $gender, $id_role, $profile_photo) {
         $this->id_user = $id_user;
         $this->email = $email;
         $this->password = $password;
@@ -19,6 +20,7 @@ class User {
         $this->first_surname = $first_surname;
         $this->second_surname = $second_surname;
         $this->birth_date = $birth_date;
+        $this->gender = $gender;
         $this->id_role = $id_role;
         $this->profile_photo = $profile_photo;
     }
@@ -199,6 +201,26 @@ class User {
     public function setBirth_date($birth_date)
     {
         $this->birth_date = $birth_date;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of gender
+     */ 
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * Set the value of gender
+     *
+     * @return  self
+     */ 
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
 
         return $this;
     }

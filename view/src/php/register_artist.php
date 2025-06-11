@@ -62,6 +62,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="input-group">
                     <input type="date" name="birth_date" placeholder="Fecha de nacimiento" required>
                 </div>
+                <div class="input-group">
+                    <label for="gender">Género:</label>
+                    <select name="gender" id="gender" required>
+                        <option value="">-- Selecciona --</option>
+                        <option value="male">Hombre</option>
+                        <option value="female">Mujer</option>
+                        <option value="other">Otro</option>
+                        <option value="prefer_not_to_say">Prefiero no decirlo</option>
+                    </select>
+                </div>
 
                 <div class="buttons">
                     <button type="submit" class="button">Registrar</button>
