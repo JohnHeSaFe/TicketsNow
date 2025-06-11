@@ -59,6 +59,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="input-group">
                     <input type="text" name="segundo_apellido" placeholder="Segundo apellido" required>
                 </div>
+                <div class="input-group">
+                    <input type="date" name="birth_date" placeholder="Fecha de nacimiento" required>
+                </div>
 
                 <div class="buttons">
                     <button type="submit" class="button">Registrar</button>

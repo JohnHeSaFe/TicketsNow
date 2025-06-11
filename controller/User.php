@@ -9,14 +9,16 @@ class User {
     private $second_surname;
     private $id_role;
     private $profile_photo;
+    private $birth_date;
 
-    public function __construct($id_user, $email, $password, $name, $first_surname, $second_surname, $id_role, $profile_photo) {
+    public function __construct($id_user, $email, $password, $name, $first_surname, $second_surname, $birth_date, $id_role, $profile_photo) {
         $this->id_user = $id_user;
         $this->email = $email;
         $this->password = $password;
         $this->name = $name;
         $this->first_surname = $first_surname;
         $this->second_surname = $second_surname;
+        $this->birth_date = $birth_date;
         $this->id_role = $id_role;
         $this->profile_photo = $profile_photo;
     }
@@ -177,6 +179,26 @@ class User {
     public function setProfile_photo($profile_photo)
     {
         $this->profile_photo = $profile_photo;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of birth_date
+     */ 
+    public function getBirth_date()
+    {
+        return $this->birth_date;
+    }
+
+    /**
+     * Set the value of birth_date
+     *
+     * @return  self
+     */ 
+    public function setBirth_date($birth_date)
+    {
+        $this->birth_date = $birth_date;
 
         return $this;
     }
