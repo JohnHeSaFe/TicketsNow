@@ -29,6 +29,7 @@ class UserController
                     second_surname VARCHAR(100),
                     birth_date DATE,
                     gender ENUM('male', 'female', 'other', 'prefer_not_to_say'),
+                    phone_number VARCHAR(20),
                     id_role INT,
                     profile_photo VARCHAR(255)
                 )
@@ -51,7 +52,7 @@ class UserController
                 return "Todos los campos son obligatorios.";
             }
 
-            $stmt = $this->conn->prepare("SELECT id_user, name, first_surname, second_surname, birth_date, gender, id_role, password FROM users WHERE email = ?");
+            $stmt = $this->conn->prepare("SELECT id_user, name, first_surname, second_surname, birth_date, gender, phone_number, id_role, password FROM users WHERE email = ?");
             $stmt->execute([$email]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -65,6 +66,7 @@ class UserController
                     $user['second_surname'],
                     $user['birth_date'],
                     $user['gender'],
+                    $user['phone_number'],
                     $user['id_role'],
                     null 
                 );
@@ -118,7 +120,8 @@ class UserController
         if (
             empty($data['email']) || empty($data['password']) ||
             empty($data['nombre']) || empty($data['primer_apellido']) || 
-            empty($data['segundo_apellido']) || empty($data['birth_date'])
+            empty($data['segundo_apellido']) || empty($data['birth_date']) ||
+            empty($data['phone_number'])
         ) {
             return "Todos los campos son obligatorios.";
         }
@@ -150,9 +153,15 @@ class UserController
             return "Opcion de genero no válido.";
         }
 
+        $phone_number = $data['phone_number'];
+        $pattern = "/^[0-9]{11}$/";
+        if (!preg_match($pattern, $phone_number)) {
+            return "Número de teléfono inválido. El formato es de 11 dígitos sin espacios.";
+        }
+
         $profilePhoto = '';
 
-        $user = new User(null, $email, $password, $name, $first_surname, $second_surname, $birth_date, $gender, $role_id, $profilePhoto);
+        $user = new User(null, $email, $password, $name, $first_surname, $second_surname, $birth_date, $gender, $phone_number, $role_id, $profilePhoto);
 
         try {
             $check = $this->conn->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
@@ -162,8 +171,8 @@ class UserController
                 return "El correo electrónico ya está registrado.";
             }
 
-            $stmt = $this->conn->prepare("INSERT INTO users (email, password, name, first_surname, second_surname, birth_date, gender, id_role, profile_photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$user->getEmail(), $user->getPassword(), $user->getName(), $user->getFirst_surname(), $user->getSecond_surname(), $user->getBirth_date(), $user->getGender(), $user->getId_role(), $user->getProfile_photo()]);
+            $stmt = $this->conn->prepare("INSERT INTO users (email, password, name, first_surname, second_surname, birth_date, gender, phone_number, id_role, profile_photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$user->getEmail(), $user->getPassword(), $user->getName(), $user->getFirst_surname(), $user->getSecond_surname(), $user->getBirth_date(), $user->getGender(), $user->getPhone_number(), $user->getId_role(), $user->getProfile_photo()]);
 
             header("Location: login.php");
             exit;
