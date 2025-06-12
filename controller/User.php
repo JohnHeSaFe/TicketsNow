@@ -11,8 +11,9 @@ class User {
     private $profile_photo;
     private $birth_date;
     private $gender;
+    private $phone_number;
 
-    public function __construct($id_user, $email, $password, $name, $first_surname, $second_surname, $birth_date, $gender, $id_role, $profile_photo) {
+    public function __construct($id_user, $email, $password, $name, $first_surname, $second_surname, $birth_date, $gender, $phone_number, $id_role, $profile_photo) {
         $this->id_user = $id_user;
         $this->email = $email;
         $this->password = $password;
@@ -21,6 +22,7 @@ class User {
         $this->second_surname = $second_surname;
         $this->birth_date = $birth_date;
         $this->gender = $gender;
+        $this->phone_number = $phone_number;
         $this->id_role = $id_role;
         $this->profile_photo = $profile_photo;
     }
@@ -221,6 +223,26 @@ class User {
     public function setGender($gender)
     {
         $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of phone_number
+     */ 
+    public function getPhone_number()
+    {
+        return $this->phone_number;
+    }
+
+    /**
+     * Set the value of phone_number
+     *
+     * @return  self
+     */ 
+    public function setPhone_number($phone_number)
+    {
+        $this->phone_number = $phone_number;
 
         return $this;
     }

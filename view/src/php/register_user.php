@@ -75,6 +75,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <option value="prefer_not_to_say">Prefiero no decirlo</option>
                     </select>
                 </div>
+                <div class="input-group">
+                    <input type="text" name="phone_number" placeholder="Número de teléfono (ej. 34123456789)">
+                </div>
 
                 <div class="buttons">
                     <button type="submit" class="button">Registrar</button>

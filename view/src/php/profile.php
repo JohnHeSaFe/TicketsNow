@@ -46,6 +46,8 @@ switch ($gender) {
         $gender = 'No especificado';
         break;
 }
+$unformatted_phone_number = $user->getPhone_number();
+$phone_number = "+" . substr($unformatted_phone_number, 0, 2) . " " . substr($unformatted_phone_number, 2);
 $email = $user->getEmail();
 $photo = $user->getProfile_photo() ?: '../../media/img/Interfaces/user_icon.png';
 
@@ -180,6 +182,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["profile_photo"])) {
         <div class="info-group">
             <label>Genero</label>
             <span><?php echo htmlspecialchars($gender); ?></span>
+        </div>
+        <div class="info-group">
+            <label>Número de teléfono</label>
+            <span><?php echo htmlspecialchars($phone_number); ?></span>
         </div>
 
         <?php if ($_SESSION['user']->getId_role() == 3): ?>
